@@ -11,12 +11,12 @@ object myBuild extends Build {
     id="main",
     base=file("."),
     settings = Project.defaultSettings ++ Seq(
-      scalaVersion := "2.10.3",
+      scalaVersion := "2.11.1",
       libraryDependencies ++= List(
         "com.typesafe.slick" %% "slick" % "2.1.0",
         "com.typesafe.slick" %% "slick-codegen" % "2.1.0-RC3",
         "org.slf4j" % "slf4j-nop" % "1.6.4",
-        "com.h2database" % "h2" % "1.3.170"
+        "mysql" % "mysql-connector-java" % "latest.release"
       ),
       slick <<= slickCodeGenTask, // register manual sbt command
       sourceGenerators in Compile <+= slickCodeGenTask // register automatic code generation on every compile, remove for only manual use
@@ -26,13 +26,16 @@ object myBuild extends Build {
   // code generation task
   lazy val slick = TaskKey[Seq[File]]("gen-tables")
   lazy val slickCodeGenTask = (sourceManaged, dependencyClasspath in Compile, runner in Compile, streams) map { (dir, cp, r, s) =>
-    val outputDir = (dir / "slick").getPath // place generated files in sbt's managed sources folder
-    val url = "jdbc:h2:mem:test;INIT=runscript from 'src/main/sql/create.sql'" // connection info for a pre-populated throw-away, in-memory db for this demo, which is freshly initialized on every run
-    val jdbcDriver = "org.h2.Driver"
-    val slickDriver = "scala.slick.driver.H2Driver"
-    val pkg = "demo"
-    toError(r.run("scala.slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, pkg), s.log))
-    val fname = outputDir + "/demo/Tables.scala"
+    val dbName = "articlio"
+    val userName = "articlio"
+    val password = "" // no password for this user
+    val outputDir = (dir / dbName).getPath // place generated files in sbt's managed sources folder
+    val url = s"jdbc:mysql://localhost:3306/$dbName" // connection info for a pre-populated throw-away, in-memory db for this demo, which is freshly initialized on every run
+    val jdbcDriver = "com.mysql.jdbc.Driver"
+    val slickDriver = "scala.slick.driver.MySQLDriver"
+    val pkg = "slickGenerated"
+    toError(r.run("scala.slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, pkg, userName, password), s.log))
+    val fname = outputDir + "/slickGenerated/Tables.scala"
     Seq(file(fname))
   }
 }
