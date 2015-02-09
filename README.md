@@ -1,3 +1,8 @@
-This code example shows how to setup sbt to use Slick's preconfigued code-generator for working with an existing database schema. `project/Build.scala` enables automatically as well as manually triggered code-generation. `src/main/scala/Example.scala` uses the generated code. The code is generated into file `target/scala-2.10/src_managed/slick/demo/Tables.scala`, which can be changed in the sbt script. It is usally wise to keep the generated Slick code under version control.
+This code (adapted from the official slick codegen example) generates slick code for an existing database schema. 
+The database schema it generates slick code for, is defined in project/ alongside all necessary database connection details.
 
-Use `sbt run` to run the demo.
+Use `sbt run` to generate the slick code for your schema. It will connect to the database and generate it. A console message will show saying the scala source file that it generates the slick code into.
+
+From the initial official readme (not sure what is automatically v.s. manually there, may not matter):
+
+`project/Build.scala` enables automatically as well as manually triggered code-generation. `src/main/scala/Example.scala` uses the generated code. It is usally wise to keep the generated Slick code under version control.

@@ -15,10 +15,10 @@ object myBuild extends Build {
     id="main",
     base=file("."),
     settings = Project.defaultSettings ++ Seq(
-      scalaVersion := "2.11.1",
+      scalaVersion := "2.11.5",
       libraryDependencies ++= List(
         "com.typesafe.slick" %% "slick" % "2.1.0",
-        "com.typesafe.slick" %% "slick-codegen" % "2.1.0-RC3",
+        "com.typesafe.slick" %% "slick-codegen" % "2.1.0",
         "org.slf4j" % "slf4j-nop" % "1.6.4",
         "mysql" % "mysql-connector-java" % "latest.release"
       ),
