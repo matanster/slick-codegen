@@ -36,11 +36,11 @@ object myBuild extends Build {
     val url = s"jdbc:mysql://localhost:3306/$dbName" // connection info for a pre-populated throw-away, in-memory db for this demo, which is freshly initialized on every run
     val jdbcDriver = "com.mysql.jdbc.Driver"
     val slickDriver = "scala.slick.driver.MySQLDriver"
-    val pkg = "slickGenerated"
+    val targetPackageName = "models"
     val outputDir = (dir / dbName).getPath // place generated files in sbt's managed sources folder
-    val fname = outputDir + "/slickGenerated/Tables.scala"
-    println(s"\nOutput scala file: $fname\n")
-    toError(r.run("scala.slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, pkg, userName, password), s.log))
+    val fname = outputDir + s"/$targetPackageName/Tables.scala"
+    println(s"\nThis should generate the following source file: file://$fname\n")
+    toError(r.run("scala.slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, targetPackageName, userName, password), s.log))
     Seq(file(fname))
   }
 }
