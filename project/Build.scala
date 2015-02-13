@@ -1,8 +1,7 @@
 /**
  * auto-generate Slick classes for a given existing database,
- * then run some code (which here really does nothing, but could be your actual application, if you want)
  *
- * Usage: sbt run
+ * Usage: sbt slickGenerate
  *
  */
 
@@ -22,8 +21,7 @@ object myBuild extends Build {
         "org.slf4j" % "slf4j-nop" % "1.6.4",
         "mysql" % "mysql-connector-java" % "latest.release"
       ),
-      slick <<= slickCodeGenTask, // register manual sbt command
-      sourceGenerators in Compile <+= slickCodeGenTask // register automatic code generation on every compile, remove for only manual use
+      slick <<= slickCodeGenTask // register sbt command
     )
   ) 
 
