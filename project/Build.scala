@@ -16,8 +16,8 @@ object myBuild extends Build {
     settings = Project.defaultSettings ++ Seq(
       scalaVersion := "2.11.5",
       libraryDependencies ++= List(
-        "com.typesafe.slick" %% "slick" % "2.1.0",
-        "com.typesafe.slick" %% "slick-codegen" % "2.1.0",
+        "com.typesafe.slick" %% "slick" % "3.0.0-RC1",
+        "com.typesafe.slick" %% "slick-codegen" % "3.0.0-RC1",
         "org.slf4j" % "slf4j-nop" % "1.6.4",
         "mysql" % "mysql-connector-java" % "latest.release"
       ),
@@ -33,13 +33,13 @@ object myBuild extends Build {
     val password = "" // no password for this user
     val url = s"jdbc:mysql://localhost:3306/$dbName" 
     val jdbcDriver = "com.mysql.jdbc.Driver"
-    val slickDriver = "scala.slick.driver.MySQLDriver"
+    val slickDriver = "slick.driver.MySQLDriver"
     val targetPackageName = "models"
     val outputDir = (dir / dbName).getPath // place generated files in sbt's managed sources folder
     val fname = outputDir + s"/$targetPackageName/Tables.scala"
     println(s"\nauto-generating slick source for database schema at $url...")
     println(s"output source file file: file://$fname\n")
-    toError(r.run("scala.slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, targetPackageName, userName, password), s.log))
+    toError(r.run("slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, targetPackageName, userName, password), s.log))
     Seq(file(fname))
   }
 }
